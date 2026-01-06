@@ -9,19 +9,19 @@ import (
 type FileMode uint32
 
 const (
-	ModeBlob	FileMode = 0100644 //normal file 
-	ModeExecutable	FileMode = 0100755 //executable file 
-	ModeTree  FileMode = 0040000 //directory/tree
+	ModeBlob       FileMode = 0100644 // normal file 
+	ModeExecutable FileMode = 0100755 // executable file 
+	ModeTree       FileMode = 0040000 // directory/tree
 )
 
 type TreeEntry struct {
-	Mode  FileMode
-	Name  string 
-	Hash  string 
+	Mode FileMode
+	Name string 
+	Hash string 
 	Type ObjectType
 }
 
-//the tree represents a complete tree structure
+// the tree represents a complete tree structure
 type Tree struct {
 	Entries []TreeEntry
 }
@@ -37,7 +37,7 @@ func (t *Tree) AddEntry(mode FileMode, name string, hash string, objType ObjectT
 		Mode: mode,
 		Name: name,
 		Hash: hash,
-		Type: objType
+		Type: objType,
 	})
 }
 
@@ -47,10 +47,10 @@ func (t *Tree) Sort() {
 	})
 }
 
-// serialize converst the tree to the normal git tree format
+// serialize converts the tree to the normal git tree format
 // <mode> <name>\0<20-byte-sha>
 // we can use a full hex hash instead of binary
-func (t *Tree) Serialize() [] {
+func (t *Tree) Serialize() []byte {
 	var builder strings.Builder 
 
 	t.Sort()
@@ -67,14 +67,14 @@ func (t *Tree) String() string {
 	builder.WriteString("Tree with entries:\n")
 
 	for _, entry := range t.Entries {
-		builder.WriteString(fmt.Sprintf(" %o %s %s (%s)\n",
+		builder.WriteString(fmt.Sprintf("  %o %s %s (%s)\n",
 			entry.Mode, entry.Type, entry.Name, entry.Hash[:8]))
 	}
 
 	return builder.String()
 }
 
-// getmode determines the file mode from os.FileMode 
+// GetMode determines the file mode from os.FileMode 
 func GetMode(isExecutable bool) FileMode {
 	if isExecutable {
 		return ModeExecutable

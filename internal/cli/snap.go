@@ -49,8 +49,9 @@ func NewSnapCommand() *cobra.Command {
 	}
 }
 
-func snapFile(fs *store.FileStore, filepath string) error {
-	data, err := os.ReadFile(filepath)
+// Changed parameter name from 'filepath' to 'filePath' to avoid conflict
+func snapFile(fs *store.FileStore, filePath string) error {
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %w", err)
 	}
@@ -61,11 +62,11 @@ func snapFile(fs *store.FileStore, filepath string) error {
 		return fmt.Errorf("failed to write object: %w", err)
 	}
 
-	fileName := filepath.Base(filepath)
+	fileName := filepath.Base(filePath)
 	fmt.Printf("Snapped file: %s\n", fileName)
-	fmt.Printf("	Type: %s\n", obj.Type)
-	fmt.Printf("	Hash: %s\n", obj.HashSum)
-	fmt.Printf("	Size: %d bytes\n", obj.Size)
+	fmt.Printf("\tType: %s\n", obj.Type)
+	fmt.Printf("\tHash: %s\n", obj.HashSum)
+	fmt.Printf("\tSize: %d bytes\n", obj.Size)
 
 	return nil
 }
@@ -82,8 +83,8 @@ func snapDirectory(fs *store.FileStore, dirPath string) error {
 	dirName := filepath.Base(absPath)
 
 	fmt.Printf("Snapped directory: %s\n", dirName)
-	fmt.Printf("	Type: tree\n")
-	fmt.Printf("	Hash: %s\n", treeHash)
+	fmt.Printf("\tType: tree\n")
+	fmt.Printf("\tHash: %s\n", treeHash)
 	fmt.Println("\nAll files and subdirectories have been stored in .gut/objects/")
 	fmt.Println("Use this hash to recreate the entire directory structure later.")
 

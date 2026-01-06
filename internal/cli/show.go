@@ -122,6 +122,11 @@ func displayTree(data []byte) {
 			continue
 		}
 
+		nullIdx := strings.Index(line, "\x00")
+		if nullIdx == -1 {
+			continue
+		}
+
 		parts := strings.SplitN(line[:nullIdx], " ", 2)
 		if len(parts) != 2 {
 			continue
